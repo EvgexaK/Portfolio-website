@@ -273,22 +273,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isAnimating || newLang === currentLang) return;
         isAnimating = true;
 
-        // Step 1: Flip out (rotate page down)
-        pageWrapper.classList.add('cube-flip-out');
+        const isMobile = window.innerWidth <= 768;
 
-        // Step 2: After flip completes, reset and change language
-        setTimeout(() => {
-            resetToInitialState();
-            applyLanguage(newLang);
+        // Step 1: Curtain slides up to cover the screen (reverse of intro)
+        const tl = gsap.timeline();
 
-            // Step 3: Remove flip class and play intro
-            pageWrapper.classList.remove('cube-flip-out');
+        tl.to(".lang-switch-container", { opacity: 0, duration: 0.3 })
+            .to(".nav-menu a", { x: 20, opacity: 0, stagger: 0.05, duration: 0.4 }, "<")
+            .to([".main-title-layer", ".title-slice"], { y: 60, opacity: 0, duration: 0.6 }, "-=0.3")
+            .to(".project-card", { y: 50, opacity: 0, duration: 0.5, stagger: 0.1 }, "-=0.4")
+            .to(".flower-center-target", { scale: 1, opacity: 1, duration: 0.8 }, "-=0.3")
+            .to(".curtain", {
+                height: "100%",
+                top: "0",
+                duration: 1,
+                ease: "power4.inOut"
+            }, "-=0.6")
+            .call(() => {
+                // Step 2: Change language while covered
+                applyLanguage(newLang);
 
-            // Small delay before playing intro animation
-            setTimeout(() => {
-                playIntroAnimation();
-            }, 100);
-        }, 600); // Match CSS transition duration
+                // Step 3: Play intro animation (curtain slides down)
+                setTimeout(() => {
+                    playIntroAnimation();
+                }, 200);
+            });
     }
 
     // Initial setup (no animation on first load - handled by main load event)
