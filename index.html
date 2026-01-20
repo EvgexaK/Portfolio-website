@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zhdanov Portfolio</title>
+    <title data-i18n="page-title">Zhdanov Portfolio</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,14 +22,14 @@
 <body>
 
     <nav>
-        <div class="headline-nav">
+        <div class="headline-nav" data-i18n="role-title">
             Designer, 3D Generalist<br>& Developer
         </div>
         <div class="nav-menu">
-            <a href="#">Work</a>
-            <a href="#">Blog</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
+            <a href="#" data-i18n="nav-work">Work</a>
+
+            <a href="#" data-i18n="nav-about">About</a>
+            <a href="#" data-i18n="nav-contact">Contact</a>
         </div>
     </nav>
 
@@ -37,26 +37,26 @@
         <div class="carousel-section">
             <div class="project-card card-design">
                 <div class="typing-wrapper">
-                    <span class="card-label static-text">Design</span>
-                    <span class="card-label typing-text">Design</span>
+                    <span class="card-label static-text" data-i18n="card-design">Design</span>
+                    <span class="card-label typing-text" data-i18n="card-design">Design</span>
                 </div>
             </div>
             <div class="project-card card-3d">
                 <div class="spinner-wrapper">
-                    <div class="layer">3D</div>
-                    <div class="layer">3D</div>
-                    <div class="layer">3D</div>
-                    <div class="layer">3D</div>
-                    <div class="layer">3D</div>
-                    <div class="layer">3D</div>
-                    <div class="layer">3D</div>
-                    <div class="layer">3D</div>
+                    <div class="layer" data-i18n="card-3d">3D</div>
+                    <div class="layer" data-i18n="card-3d">3D</div>
+                    <div class="layer" data-i18n="card-3d">3D</div>
+                    <div class="layer" data-i18n="card-3d">3D</div>
+                    <div class="layer" data-i18n="card-3d">3D</div>
+                    <div class="layer" data-i18n="card-3d">3D</div>
+                    <div class="layer" data-i18n="card-3d">3D</div>
+                    <div class="layer" data-i18n="card-3d">3D</div>
                 </div>
             </div>
             <div class="project-card card-tech">
                 <span class="card-label">
-                    <span class="tech-brackets">&lt;</span><span class="tech-content">Tech</span><span
-                        class="tech-brackets">/&gt;</span>
+                    <span class="tech-brackets">&lt;</span><span class="tech-content"
+                        data-i18n="card-tech">Tech</span><span class="tech-brackets">/&gt;</span>
                 </span>
             </div>
         </div>
@@ -64,11 +64,11 @@
         <!-- Large Title (Wrapped for Glitch Effect) -->
         <div class="large-title-container" id="titleContainer">
             <div class="glitch-title-wrapper" id="titleWrapper">
-                <h1 class="large-title main-title-layer">EVGENII ZHDANOV</h1>
+                <h1 class="large-title main-title-layer" data-i18n="main-title">EVGENII ZHDANOV</h1>
                 <!-- Slices for Distortion -->
-                <h1 class="large-title title-slice slice-1">EVGENII ZHDANOV</h1>
-                <h1 class="large-title title-slice slice-2">EVGENII ZHDANOV</h1>
-                <h1 class="large-title title-slice slice-3">EVGENII ZHDANOV</h1>
+                <h1 class="large-title title-slice slice-1" data-i18n="main-title">EVGENII ZHDANOV</h1>
+                <h1 class="large-title title-slice slice-2" data-i18n="main-title">EVGENII ZHDANOV</h1>
+                <h1 class="large-title title-slice slice-3" data-i18n="main-title">EVGENII ZHDANOV</h1>
             </div>
         </div>
     </div>
@@ -80,6 +80,17 @@
             <div class="glitch-layer layer-green"></div>
             <div class="glitch-layer layer-blue"></div>
             <img src="Logotype_White.png" class="logo-main" alt="Logotype White">
+        </div>
+
+        <!-- Language Switch -->
+        <div class="lang-switch-container">
+            <button class="lang-btn active" data-lang="en">
+                <span class="lang-text">EN</span>
+            </button>
+            <span class="lang-divider">/</span>
+            <button class="lang-btn" data-lang="ru">
+                <span class="lang-text">RU</span>
+            </button>
         </div>
     </div>
 

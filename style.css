@@ -78,9 +78,7 @@ nav {
     display: flex;
     flex-direction: column;
     padding-top: 15vh;
-    /* Added padding to push content down a bit */
-    padding-bottom: 37vh;
-    /* Increased to push content up above higher footer */
+    padding-bottom: 50vh;
 }
 
 .hero-text-row {
@@ -375,26 +373,21 @@ nav {
 
 
 /* --- Large Title (Glitch & 3D Effect) --- */
-/* --- Large Title (Glitch & 3D Effect) --- */
 .large-title-container {
     width: 100vw;
-    /* Expand clip boundary to full viewport */
     padding: 0 3rem;
-    /* Maintain text alignment to red lines content box */
     box-sizing: border-box;
-    position: relative;
+    position: absolute;
+    bottom: 36vh;
     left: 50%;
     transform: translateX(-50%);
     margin: 0;
-    margin-top: auto;
     text-align: justify;
-    flex-shrink: 0;
     z-index: 5;
     perspective: 1000px;
-    overflow: hidden;
-    padding-bottom: 0.1em;
-    /* Prevent bottom clipping of V */
-    margin-bottom: -0.1em;
+    overflow: visible;
+    padding-bottom: 1rem;
+    padding-top: 0.3em;
 }
 
 .glitch-title-wrapper {
@@ -403,7 +396,6 @@ nav {
     transform-style: preserve-3d;
     will-change: transform;
     width: 100%;
-    /* Ensure it fills container */
 }
 
 .large-title {
@@ -417,14 +409,24 @@ nav {
     white-space: nowrap;
     text-align: justify;
     text-align-last: justify;
-    /* Force full width justification */
     width: 100%;
     display: block;
-
-    /* Initial State for Intro Animation */
     opacity: 0;
     transform: translateY(60px);
 }
+
+/* --- Localization Adjustments --- */
+html[lang="ru"] .large-title {
+    font-size: 10.5vw;
+    line-height: 1.1;
+    word-spacing: -0.1em;
+}
+
+html[lang="ru"] .large-title-container {
+    padding-top: 0.25em;
+    bottom: 33vh;
+}
+
 
 /* Glitch Slices (Hidden by default, visible on interaction) */
 .title-slice {
@@ -654,5 +656,98 @@ nav {
 
     .card-label {
         font-size: 2.5rem;
+    }
+}
+
+/* --- Language Switcher --- */
+.lang-switch-container {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    z-index: 200;
+}
+
+.lang-divider {
+    color: #444;
+    font-size: 0.8rem;
+}
+
+.lang-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-main);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #666;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.lang-btn:hover {
+    color: #fff;
+}
+
+.lang-btn.active {
+    color: #fff;
+}
+
+.lang-btn::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 14px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    border: 1px solid #333;
+}
+
+.lang-btn:hover::before,
+.lang-btn.active::before {
+    opacity: 1;
+    border-color: #555;
+    /* Softer border for active state */
+}
+
+/* Custom SVG Flags for B&W Aesthetic (Default) */
+.lang-btn[data-lang="en"]::before {
+    /* UK Flag simplified: Black base, white crosses */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 32"><rect width="60" height="32" fill="%231a1a1a"/><path d="M0,0 L60,32 M60,0 L0,32" stroke="%23fff" stroke-width="4"/><path d="M30,0 L30,32 M0,16 L60,16" stroke="%23fff" stroke-width="6"/></svg>');
+}
+
+.lang-btn[data-lang="ru"]::before {
+    /* RU Flag simplified: White, Grey, Black stripes */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="10" y="0" fill="%23fff"/><rect width="60" height="10" y="10" fill="%23777"/><rect width="60" height="10" y="20" fill="%231a1a1a"/></svg>');
+}
+
+/* Colored Flags on Hover */
+.lang-btn[data-lang="en"]:hover::before {
+    /* UK Flag Color: Blue #012169, Red #C8102E, White #FFFFFF */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 32"><rect width="60" height="32" fill="%23012169"/><path d="M0,0 L60,32 M60,0 L0,32" stroke="%23fff" stroke-width="6"/><path d="M0,0 L60,32 M60,0 L0,32" stroke="%23C8102E" stroke-width="4"/><path d="M30,0 L30,32 M0,16 L60,16" stroke="%23fff" stroke-width="10"/><path d="M30,0 L30,32 M0,16 L60,16" stroke="%23C8102E" stroke-width="6"/></svg>');
+    border-color: transparent;
+}
+
+.lang-btn[data-lang="ru"]:hover::before {
+    /* RU Flag Color: White, Blue #0039A6, Red #D52B1E */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="30" fill="%23fff"/><rect width="60" height="10" y="10" fill="%230039A6"/><rect width="60" height="10" y="20" fill="%23D52B1E"/></svg>');
+    border-color: transparent;
+}
+
+@media (max-width: 768px) {
+    .lang-switch-container {
+        bottom: 3.5rem;
+        /* Adjusted for mobile safe area if needed, but keeping it low */
     }
 }

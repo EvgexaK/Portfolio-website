@@ -119,3 +119,91 @@ window.addEventListener('load', () => {
         gsap.to([slice1, slice2, slice3], { x: 0, opacity: 0, duration: 0.5, ease: "power2.out" });
     });
 });
+
+/* --- Language Support --- */
+document.addEventListener('DOMContentLoaded', () => {
+    const translations = {
+        en: {
+            'page-title': 'Zhdanov Portfolio',
+            'role-title': 'Designer, 3D Generalist<br>& Developer',
+            'nav-work': 'Work',
+            'nav-about': 'About',
+            'nav-contact': 'Contact',
+            'card-design': 'Design',
+            'card-3d': '3D', // or '3D Art'
+            'card-tech': 'Tech',
+            'main-title': 'EVGENII ZHDANOV'
+        },
+        ru: {
+            'page-title': 'Портфолио Жданова',
+            'role-title': 'Дизайнер, 3D Дженералист<br>и Разработчик',
+            'nav-work': 'Работы',
+            'nav-about': 'Обо мне',
+            'nav-contact': 'Контакты',
+            'card-design': 'Design', // Kept in English
+            'card-3d': '3D',
+            'card-tech': 'Tech', // Kept in English
+            'main-title': 'ЕВГЕНИЙ ЖДАНОВ'
+        }
+    };
+
+    const langBtns = document.querySelectorAll('.lang-btn');
+    const translatableElements = document.querySelectorAll('[data-i18n]');
+
+    // Detection Logic
+    function getPreferredLanguage() {
+        const savedLang = localStorage.getItem('portfolio-lang');
+        if (savedLang) return savedLang;
+
+        const systemLang = navigator.language || navigator.userLanguage;
+        if (systemLang.toLowerCase().startsWith('ru')) {
+            return 'ru';
+        }
+        return 'en';
+    }
+
+    function setLanguage(lang) {
+        // Update variables
+        const currentLang = translations[lang];
+
+        // Update DOM text
+        translatableElements.forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (currentLang[key]) {
+                // If it contains HTML (like <br>), use innerHTML, else textContent
+                if (currentLang[key].includes('<')) {
+                    el.innerHTML = currentLang[key];
+                } else {
+                    el.textContent = currentLang[key];
+                }
+            }
+        });
+
+        // Update Buttons
+        langBtns.forEach(btn => {
+            if (btn.getAttribute('data-lang') === lang) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Save preference
+        localStorage.setItem('portfolio-lang', lang);
+
+        // Update html lang attribute for accessibility
+        document.documentElement.lang = lang;
+    }
+
+    // Init
+    const initialLang = getPreferredLanguage();
+    setLanguage(initialLang);
+
+    // Event Listeners
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const lang = btn.getAttribute('data-lang');
+            setLanguage(lang);
+        });
+    });
+});
