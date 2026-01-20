@@ -2,11 +2,45 @@ window.addEventListener('load', () => {
     let isIntroComplete = false;
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
+    // --- Dynamic Title Sizing ---
+    function resizeTitle() {
+        const container = document.querySelector('.large-title-container');
+        const titles = document.querySelectorAll('.large-title');
+        if (!container || titles.length === 0) return;
+
+        const isMobileView = window.innerWidth <= 768;
+        const padding = isMobileView ? 48 : 96; // 1.5rem or 3rem in pixels
+        const availableWidth = window.innerWidth - padding;
+
+        // Use first title to measure
+        const mainTitle = titles[0];
+
+        // Start with a base font size and measure
+        let fontSize = 210;
+        mainTitle.style.fontSize = fontSize + 'px';
+
+        // Get the actual text width
+        let textWidth = mainTitle.scrollWidth;
+
+        // Calculate the ratio and adjust to fill available width
+        const ratio = availableWidth / textWidth;
+        fontSize = Math.floor(fontSize * ratio);
+
+        // Apply to all title layers
+        titles.forEach(title => {
+            title.style.fontSize = fontSize + 'px';
+        });
+    }
+
+    // Initial sizing (before animation reveals title)
+    resizeTitle();
+    window.addEventListener('resize', resizeTitle);
+
     // Intro Animation
     // Mobile Check for Footer Position
     const isMobile = window.innerWidth <= 768;
-    const footerTop = isMobile ? "85vh" : "65vh"; // Desktop restored to 65vh
-    const footerHeight = isMobile ? "15vh" : "35vh"; // Desktop restored to 35vh
+    const footerTop = isMobile ? "60vh" : "65vh";
+    const footerHeight = isMobile ? "40vh" : "35vh";
 
     tl.to(".curtain", {
         height: footerHeight,
@@ -27,6 +61,7 @@ window.addEventListener('load', () => {
         // But hide slices again immediately after intro, ready for interaction
         .set(".title-slice", { opacity: 0 })
         .to(".nav-menu a", { x: 0, opacity: 1, stagger: 0.1, duration: 0.8 }, "-=1.0")
+        .to(".lang-switch-container", { opacity: 1, duration: 0.6, ease: "power2.out" }, "-=0.3")
         .call(() => { isIntroComplete = true; });
 
 
@@ -193,6 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update html lang attribute for accessibility
         document.documentElement.lang = lang;
+
+        // Trigger title resize for new text
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
     }
 
     // Init

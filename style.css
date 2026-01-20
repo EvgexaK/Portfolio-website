@@ -374,15 +374,15 @@ nav {
 
 /* --- Large Title (Glitch & 3D Effect) --- */
 .large-title-container {
-    width: 100vw;
+    width: 100%;
     padding: 0 3rem;
     box-sizing: border-box;
     position: absolute;
-    bottom: 36vh;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 32vh;
+    left: 0;
+    right: 0;
     margin: 0;
-    text-align: justify;
+    text-align: left;
     z-index: 5;
     perspective: 1000px;
     overflow: visible;
@@ -392,23 +392,21 @@ nav {
 
 .glitch-title-wrapper {
     position: relative;
-    display: inline-block;
+    display: block;
     transform-style: preserve-3d;
     will-change: transform;
     width: 100%;
 }
 
 .large-title {
-    font-size: 11vw;
+    font-size: 9vw;
     font-weight: 800;
-    line-height: 0.8;
+    line-height: 1;
     letter-spacing: -0.02em;
     text-transform: uppercase;
     color: var(--text-color);
-    margin-left: 0;
     white-space: nowrap;
-    text-align: justify;
-    text-align-last: justify;
+    text-align: left;
     width: 100%;
     display: block;
     opacity: 0;
@@ -417,14 +415,12 @@ nav {
 
 /* --- Localization Adjustments --- */
 html[lang="ru"] .large-title {
-    font-size: 10.5vw;
-    line-height: 1.1;
-    word-spacing: -0.1em;
+    font-size: 8.5vw;
+    line-height: 1;
 }
 
 html[lang="ru"] .large-title-container {
-    padding-top: 0.25em;
-    bottom: 33vh;
+    bottom: 32vh;
 }
 
 
@@ -587,18 +583,13 @@ html[lang="ru"] .large-title-container {
 
     .hero {
         height: 100vh;
-        /* Fixed height for no scroll */
         min-height: 100vh;
         display: flex;
-        /* Flex to distribute space */
         flex-direction: column;
         padding: 0 1.5rem;
-        padding-top: 15vh;
-        /* Reduced top padding */
-        padding-bottom: 15vh;
-        /* Reduced bottom padding */
+        padding-top: 12vh;
+        padding-bottom: 8vh;
         overflow: hidden;
-        /* No scroll */
     }
 
 
@@ -612,25 +603,21 @@ html[lang="ru"] .large-title-container {
     .carousel-section {
         flex-direction: column;
         gap: 1vh;
-        /* Tighter gap */
         padding: 0 1.5rem;
         margin: 0;
-        /* Reset margin */
         width: 100vw;
         left: 50%;
         transform: translateX(-50%);
         overflow-x: hidden;
         scroll-snap-type: none;
         height: auto;
-        justify-content: center;
-        flex-grow: 1;
-        /* Take up available space */
+        justify-content: flex-start;
+        flex-grow: 0;
     }
 
     .project-card {
         width: 100%;
-        height: 16vh;
-        /* Smaller cards to fit */
+        height: 12vh;
         aspect-ratio: auto;
         opacity: 0;
         flex-shrink: 0;
@@ -638,16 +625,19 @@ html[lang="ru"] .large-title-container {
     }
 
     .large-title-container {
-        margin-top: 2rem;
+        position: absolute;
+        bottom: 40vh;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 0;
         width: 100vw;
         padding: 0 1.5rem;
         box-sizing: border-box;
-        /* Ensure padding doesn't expand width */
     }
 
     .large-title {
-        font-size: 9.5vw;
-        /* Slightly reduced to fit within padding */
+        font-size: 8vw;
+        text-align: center;
     }
 
     nav {
@@ -656,6 +646,11 @@ html[lang="ru"] .large-title-container {
 
     .card-label {
         font-size: 2.5rem;
+    }
+
+    /* Russian mobile override */
+    html[lang="ru"] .large-title-container {
+        bottom: 40vh;
     }
 }
 
@@ -669,6 +664,8 @@ html[lang="ru"] .large-title-container {
     align-items: center;
     gap: 0.8rem;
     z-index: 200;
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
 .lang-divider {
@@ -747,7 +744,11 @@ html[lang="ru"] .large-title-container {
 
 @media (max-width: 768px) {
     .lang-switch-container {
-        bottom: 3.5rem;
-        /* Adjusted for mobile safe area if needed, but keeping it low */
+        bottom: 1rem;
+    }
+
+    .flower-wrapper {
+        width: 40px;
+        height: 40px;
     }
 }
