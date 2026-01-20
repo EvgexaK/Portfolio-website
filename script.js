@@ -15,16 +15,16 @@ window.addEventListener('load', () => {
         // Use first title to measure
         const mainTitle = titles[0];
 
-        // Start with a base font size and measure
-        let fontSize = 210;
-        mainTitle.style.fontSize = fontSize + 'px';
+        // Use a larger base font for better accuracy on high-res displays
+        let baseFontSize = Math.max(300, availableWidth * 0.15);
+        mainTitle.style.fontSize = baseFontSize + 'px';
 
-        // Get the actual text width
+        // Get the actual text width at base size
         let textWidth = mainTitle.scrollWidth;
 
         // Calculate the ratio and adjust to fill available width
         const ratio = availableWidth / textWidth;
-        fontSize = Math.floor(fontSize * ratio);
+        let fontSize = Math.floor(baseFontSize * ratio);
 
         // Apply to all title layers
         titles.forEach(title => {
@@ -155,7 +155,7 @@ window.addEventListener('load', () => {
     });
 });
 
-/* --- Language Support --- */
+/* --- Language Support with Cube Flip Animation --- */
 document.addEventListener('DOMContentLoaded', () => {
     const translations = {
         en: {
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'nav-about': 'About',
             'nav-contact': 'Contact',
             'card-design': 'Design',
-            'card-3d': '3D', // or '3D Art'
+            'card-3d': '3D',
             'card-tech': 'Tech',
             'main-title': 'EVGENII ZHDANOV'
         },
@@ -175,17 +175,19 @@ document.addEventListener('DOMContentLoaded', () => {
             'nav-work': 'Работы',
             'nav-about': 'Обо мне',
             'nav-contact': 'Контакты',
-            'card-design': 'Design', // Kept in English
+            'card-design': 'Design',
             'card-3d': '3D',
-            'card-tech': 'Tech', // Kept in English
+            'card-tech': 'Tech',
             'main-title': 'ЕВГЕНИЙ ЖДАНОВ'
         }
     };
 
     const langBtns = document.querySelectorAll('.lang-btn');
     const translatableElements = document.querySelectorAll('[data-i18n]');
+    const pageWrapper = document.querySelector('.page-wrapper');
+    let isAnimating = false;
+    let currentLang = 'en';
 
-    // Detection Logic
     function getPreferredLanguage() {
         const savedLang = localStorage.getItem('portfolio-lang');
         if (savedLang) return savedLang;
@@ -197,24 +199,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'en';
     }
 
-    function setLanguage(lang) {
-        // Update variables
-        const currentLang = translations[lang];
-
-        // Update DOM text
+    function applyLanguage(lang) {
+        const langData = translations[lang];
         translatableElements.forEach(el => {
             const key = el.getAttribute('data-i18n');
-            if (currentLang[key]) {
-                // If it contains HTML (like <br>), use innerHTML, else textContent
-                if (currentLang[key].includes('<')) {
-                    el.innerHTML = currentLang[key];
+            if (langData[key]) {
+                if (langData[key].includes('<')) {
+                    el.innerHTML = langData[key];
                 } else {
-                    el.textContent = currentLang[key];
+                    el.textContent = langData[key];
                 }
             }
         });
 
-        // Update Buttons
         langBtns.forEach(btn => {
             if (btn.getAttribute('data-lang') === lang) {
                 btn.classList.add('active');
@@ -223,25 +220,86 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Save preference
         localStorage.setItem('portfolio-lang', lang);
-
-        // Update html lang attribute for accessibility
         document.documentElement.lang = lang;
+        currentLang = lang;
 
         // Trigger title resize for new text
         setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
     }
 
-    // Init
-    const initialLang = getPreferredLanguage();
-    setLanguage(initialLang);
+    function resetToInitialState() {
+        const isMobile = window.innerWidth <= 768;
 
-    // Event Listeners
+        // Reset curtain to full screen
+        gsap.set(".curtain", { height: "100%", top: "0" });
+        gsap.set(".flower-center-target", { scale: 1, opacity: 1 });
+
+        // Hide all animated elements
+        gsap.set(".project-card", { y: 50, opacity: 0 });
+        gsap.set([".main-title-layer", ".title-slice"], { y: 60, opacity: 0 });
+        gsap.set(".nav-menu a", { x: 20, opacity: 0 });
+        gsap.set(".lang-switch-container", { opacity: 0 });
+    }
+
+    function playIntroAnimation() {
+        const isMobile = window.innerWidth <= 768;
+        const footerTop = isMobile ? "60vh" : "65vh";
+        const footerHeight = isMobile ? "40vh" : "35vh";
+
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+        tl.to(".curtain", {
+            height: footerHeight,
+            top: footerTop,
+            duration: 1.6,
+            ease: "power4.inOut",
+            delay: 0.2
+        })
+            .to(".flower-center-target", {
+                scale: 0.8,
+                opacity: 0.8,
+                duration: 1.6
+            }, "<")
+            .to(".project-card", { y: 0, opacity: 1, duration: 1, stagger: 0.15 }, "-=0.8")
+            .to([".main-title-layer", ".title-slice"], { y: 0, opacity: 1, duration: 1.2, stagger: 0 }, "-=0.8")
+            .set(".title-slice", { opacity: 0 })
+            .to(".nav-menu a", { x: 0, opacity: 1, stagger: 0.1, duration: 0.8 }, "-=1.0")
+            .to(".lang-switch-container", { opacity: 1, duration: 0.6, ease: "power2.out" }, "-=0.3")
+            .call(() => { isAnimating = false; });
+    }
+
+    function switchLanguageWithAnimation(newLang) {
+        if (isAnimating || newLang === currentLang) return;
+        isAnimating = true;
+
+        // Step 1: Flip out (rotate page down)
+        pageWrapper.classList.add('cube-flip-out');
+
+        // Step 2: After flip completes, reset and change language
+        setTimeout(() => {
+            resetToInitialState();
+            applyLanguage(newLang);
+
+            // Step 3: Remove flip class and play intro
+            pageWrapper.classList.remove('cube-flip-out');
+
+            // Small delay before playing intro animation
+            setTimeout(() => {
+                playIntroAnimation();
+            }, 100);
+        }, 600); // Match CSS transition duration
+    }
+
+    // Initial setup (no animation on first load - handled by main load event)
+    const initialLang = getPreferredLanguage();
+    applyLanguage(initialLang);
+
+    // Event Listeners for language buttons
     langBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const lang = btn.getAttribute('data-lang');
-            setLanguage(lang);
+            switchLanguageWithAnimation(lang);
         });
     });
 });
